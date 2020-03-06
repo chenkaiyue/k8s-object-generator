@@ -1,0 +1,1 @@
+This is a subset copy of k3s contrller generator with some modification
