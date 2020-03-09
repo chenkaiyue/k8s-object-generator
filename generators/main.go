@@ -57,7 +57,7 @@ func Run(opts args.Options) {
 	if err := k8sArgs.Execute(
 		clientgenerators.NameSystems(),
 		clientgenerators.DefaultNameSystem(),
-		clientgenerators.Packages,
+		clientGenerator.Packages,
 	); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error: %v", err)
 		os.Exit(1)
