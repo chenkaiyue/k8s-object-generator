@@ -181,7 +181,7 @@ func copyGoPathToModules(customArgs *args.CustomArgs) error {
 
 func sourcePackagePath(customArgs *args.CustomArgs, pkgName string) string {
 	pkgSplit := strings.Split(pkgName, string(os.PathSeparator))
-	pkg := filepath.Join(customArgs.OutputBase, strings.Join(pkgSplit[:3], string(os.PathSeparator)))
+	pkg := filepath.Join(customArgs.OutputBase, strings.Join(pkgSplit[:2], string(os.PathSeparator)))
 	return pkg
 }
 
