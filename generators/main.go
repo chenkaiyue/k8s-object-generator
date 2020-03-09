@@ -27,7 +27,7 @@ import (
 )
 
 func Run(opts args.Options) {
-	customArgs := args.CustomArgs{
+	customArgs := &args.CustomArgs{
 		Options:      opts,
 		TypesByGroup: make(map[schema.GroupVersion][]*types.Name),
 		Package:      opts.OutputPackage,
@@ -71,7 +71,7 @@ func Run(opts args.Options) {
 	}
 
 	if len(groups) == 0 {
-		if err := copyGoPathToModules(&customArgs); err != nil {
+		if err := copyGoPathToModules(customArgs); err != nil {
 			_, _ = fmt.Fprintf(os.Stderr, "go modules copy failed: %v", err)
 			os.Exit(1)
 		}
@@ -86,32 +86,32 @@ func Run(opts args.Options) {
 		return
 	}
 
-	if err := copyGoPathToModules(&customArgs); err != nil {
+	if err := copyGoPathToModules(customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "go modules copy failed: %v", err)
 		os.Exit(1)
 	}
 
-	if err := generateDeepcopy(groups, &customArgs); err != nil {
+	if err := generateDeepcopy(groups, customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "deepcopy failed: %v", err)
 		os.Exit(1)
 	}
 
-	if err := generateClientset(groups, &customArgs); err != nil {
+	if err := generateClientset(groups, customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "clientset failed: %v", err)
 		os.Exit(1)
 	}
 
-	if err := generateListers(groups, &customArgs); err != nil {
+	if err := generateListers(groups, customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "listers failed: %v", err)
 		os.Exit(1)
 	}
 
-	if err := generateInformers(groups, &customArgs); err != nil {
+	if err := generateInformers(groups, customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "informers failed: %v", err)
 		os.Exit(1)
 	}
 
-	if err := copyGoPathToModules(&customArgs); err != nil {
+	if err := copyGoPathToModules(customArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "go modules copy failed: %v", err)
 	}
 
@@ -123,7 +123,7 @@ func Run(opts args.Options) {
 	}
 }
 
-func getInputDirs(customArgs args.CustomArgs) (inputDirs []string) {
+func getInputDirs(customArgs *args.CustomArgs) (inputDirs []string) {
 	for gv, gen := range customArgs.Options.Groups {
 		if gen.GenerateTypes {
 			gen.InformersPackage = filepath.Join(customArgs.Package, "informers/externalverions")
