@@ -6,10 +6,11 @@ import (
 )
 
 type CustomArgs struct {
-	Package      string
-	TypesByGroup map[schema.GroupVersion][]*types.Name
-	Options      Options
-	OutputBase   string
+	Package        string
+	TypesByGroup   map[schema.GroupVersion][]*types.Name
+	Options        Options
+	OutputBase     string
+	DestOutputBase string
 }
 
 type Group struct {
@@ -23,6 +24,7 @@ type Group struct {
 
 type Options struct {
 	OutputPackage string
+	OutputBase    string
 	Groups        map[string]Group
 	Boilerplate   string
 	GenMocks      bool

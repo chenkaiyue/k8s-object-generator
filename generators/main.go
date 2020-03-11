@@ -28,9 +28,10 @@ import (
 
 func Run(opts args.Options) {
 	customArgs := &args.CustomArgs{
-		Options:      opts,
-		TypesByGroup: make(map[schema.GroupVersion][]*types.Name),
-		Package:      opts.OutputPackage,
+		Options:        opts,
+		TypesByGroup:   make(map[schema.GroupVersion][]*types.Name),
+		Package:        opts.OutputPackage,
+		DestOutputBase: opts.OutputBase,
 	}
 
 	k8sArgs := gargs.Default().WithoutDefaultFlagParsing()
@@ -163,7 +164,7 @@ func copyGoPathToModules(customArgs *args.CustomArgs) error {
 		}
 
 		return filepath.Walk(pkg, func(path string, info os.FileInfo, err error) error {
-			newPath := strings.Replace(path, pkg, ".", 1)
+			newPath := strings.Replace(path, pkg, customArgs.DestOutputBase, 1)
 			if _, err := os.Stat(newPath); os.IsNotExist(err) {
 				if info.IsDir() {
 					return os.Mkdir(newPath, info.Mode())
